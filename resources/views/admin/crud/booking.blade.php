@@ -105,11 +105,11 @@
                             @endif
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-3 py-1 text-xs font-medium rounded-full 
+                        <span class="px-3 py-1 text-xs font-medium rounded-full 
                                 {{ $booking->status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 
                                    ($booking->status === 'cancelled' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 
                                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300') }}">
-                                {{ ucfirst($booking->status) }}
+                                {{ $booking->status === 'waiting_payment' ? 'Menunggu Pelunasan' : ucfirst($booking->status) }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-gray-600 dark:text-gray-300">

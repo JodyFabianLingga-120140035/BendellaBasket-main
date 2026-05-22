@@ -44,12 +44,9 @@ class AdminStatusController extends Controller
                 'payment_status' => 'required|in:pending,confirmed,failed'
             ]);
 
-            // Update status pembayaran
+            // Update status pembayaran (tipe tetap sesuai pilihan awal)
             $status->update([
-                'payment_status' => $request->payment_status,
-                'payment_type' => $request->payment_status === 'confirmed' && $status->payment_type === 'down_payment' 
-                    ? 'full_payment' 
-                    : $status->payment_type
+                'payment_status' => $request->payment_status
             ]);
 
             // Ambil booking yang terkait
@@ -57,9 +54,17 @@ class AdminStatusController extends Controller
 
             if ($request->payment_status === 'confirmed') {
                 // Jika status confirmed
-                $booking->update([
-                    'status' => 'completed'
-                ]);
+                if ($status->payment_type === 'down_payment') {
+                    // Jika DP, status booking menjadi waiting_payment
+                    $booking->update([
+                        'status' => 'waiting_payment'
+                    ]);
+                } else {
+                    // Jika full_payment, status booking menjadi completed
+                    $booking->update([
+                        'status' => 'completed'
+                    ]);
+                }
             } elseif ($request->payment_status === 'failed') {
                 // Jika status failed
                 $booking->update([
